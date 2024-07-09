@@ -17,6 +17,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'
+app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 app.json.compact = False
 
 # Define metadata, instantiate db
@@ -30,6 +31,13 @@ db.init_app(app)
 # Instantiate other extensions
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+
+blacklist = set()
+
+@jwt.token_in_blocklist_loader
+def check_if_token_revoked(jwt_header, jwt_payload):
+    jti = jwt_payload['jti']
+    return jti in blacklist
 
 # Instantiate REST API
 api = Api(app)

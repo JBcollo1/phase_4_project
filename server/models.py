@@ -38,6 +38,7 @@ class Novel(db.Model, SerializerMixin):
     __tablename__ = 'novels'
 
     id = db.Column(db.Integer, primary_key=True)
+    profile = db.Column(db.String(200), nullable = False)
     title = db.Column(db.String, nullable=False)
     genre = db.Column(db.String, nullable=False)
     author = db.Column(db.String, nullable=False)
