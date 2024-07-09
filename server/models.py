@@ -10,6 +10,7 @@ class User(db.Model, SerializerMixin):
     password = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    profile = db.Column(db.String(200))
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     novel_collections = db.relationship('NovelCollection', backref='user', lazy=True)
