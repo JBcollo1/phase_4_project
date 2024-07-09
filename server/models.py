@@ -1,6 +1,8 @@
+# models.py
+
 from sqlalchemy_serializer import SerializerMixin
 from datetime import datetime
-from config import db
+from config import db  # Import db from config.py
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
@@ -13,7 +15,8 @@ class User(db.Model, SerializerMixin):
     profile = db.Column(db.String(200))
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    novel_collections = db.relationship('NovelCollection', backref='user', lazy=True)
+    # Define the relationship to NovelCollection
+    novel_collections = db.relationship('NovelCollection', back_populates='user', lazy=True)
 
 
 class NovelCollection(db.Model, SerializerMixin):
@@ -26,6 +29,7 @@ class NovelCollection(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    # Define the relationships to User and Novel
     user = db.relationship('User', back_populates='novel_collections')
     novel = db.relationship('Novel', back_populates='novel_collections')
 
@@ -42,4 +46,5 @@ class Novel(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    novel_collections = db.relationship('NovelCollection', backref='novel', lazy=True)
+    # Define the relationship to NovelCollection
+    novel_collections = db.relationship('NovelCollection', back_populates='novel', lazy=True)
