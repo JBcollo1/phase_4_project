@@ -51,11 +51,34 @@ class AddNovel(Resource):
             synopsis=data['synopsis']
         )
 
-        # Add the new novel to the database
+        
         db.session.add(new_novel)
         db.session.commit()
 
         return {'msg': 'Novel added successfully', 'novel_id': new_novel.id}, 201
+
+
+class GetNovel(Resource):
+    def get(self, novel_id):
+        novel = Novel.query.get(novel_id)
+        if not novel:
+            return {'msg': 'Novel not found'}, 404
+
+        return {
+            'id': novel.id,
+            'title': novel.title,
+            'genre': novel.genre,
+            'author': novel.author,
+            'profile': novel.profile,
+            'publication_year': novel.publication_year,
+            'synopsis': novel.synopsis,
+            'created_at':novel.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        }, 200
+    
+
+
+novels_api.add_resource(AddNovel, '/addnovel')  
+novels_api.add_resource(GetNovel, '/<int:novel_id>')    
 
 
 novels_api.add_resource(ListNovels, '/list')
