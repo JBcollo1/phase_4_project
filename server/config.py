@@ -39,6 +39,8 @@ def check_if_token_revoked(jwt_header, jwt_payload):
     jti = jwt_payload['jti']
     return jti in blacklist
 
+
+
 # Instantiate REST API
 api = Api(app)
 
