@@ -11,6 +11,7 @@ from flask_restful import Resource
 from config import app, db, api
 from logs import logs_bp  
 from novels import novels_bp
+from novelcollection import novelcollect_bp
 
 # Add your model imports
 from models import User, NovelCollection, Novel
@@ -18,6 +19,9 @@ from models import User, NovelCollection, Novel
 # Register the Blueprint
 app.register_blueprint(logs_bp)
 app.register_blueprint(novels_bp)
+app.register_blueprint(novelcollect_bp)
+
+
 
 # Views go here!
 @app.route('/')

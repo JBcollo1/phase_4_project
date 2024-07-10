@@ -71,4 +71,3 @@ logs_api.add_resource(Signup, '/signup')
 logs_api.add_resource(Login, '/login')
 logs_api.add_resource(Logout, '/logout')
 
-#  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyMDUyOTU0NSwianRpIjoiOTNhNzRiNjgtNzhmYy00NzkyLTg4NmYtNjRmYTMxNzljOWJkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6NCwibmJmIjoxNzIwNTI5NTQ1LCJjc3JmIjoiYjk1MDZkOWItODdjNC00ZWVlLThmZTItMmNkNDE5OTQ0ZTI5IiwiZXhwIjoxNzIwNTMwNDQ1fQ.7WApI2PcjMSoqHAQj5TGMD83TjOIJY-t5kaUXcvv56M"

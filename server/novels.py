@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from flask_restful import Api, Resource, reqparse
 from config import db, bcrypt, jwt  
-from models import User, Novel, NovelCollection 
+from models import  Novel 
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt, get_jwt_identity
 
 
