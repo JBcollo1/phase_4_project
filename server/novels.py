@@ -31,11 +31,12 @@ class ListNovels(Resource):
             'author': novel.author,
             'publication_year': novel.publication_year,
             'synopsis': novel.synopsis,
-            'created_at': novel.created_at
+            'created_at': novel.created_at.isoformat() 
         } for novel in novels]
         
         return {'novels': novels_list}, 200  
 class AddNovel(Resource):
+    @jwt_required()
     def post(self):
         data = novels_args.parse_args()
         if not all(key in data for key in ['title', 'genre', 'author', 'profile','publication_year', 'synopsis']):
@@ -75,10 +76,35 @@ class GetNovel(Resource):
             'created_at':novel.created_at.strftime('%Y-%m-%d %H:%M:%S')
         }, 200
     
+class Gettitle(Resource):
+    def get(self, title):
+        try:
+        # Ensure the title is treated as a string
+            title = str(title)
+        except ValueError:
+            return {'msg': 'Invalid title format'}, 400
+
+        novel = Novel.query.filter_by(title=title).first()
+        if not novel:
+            return {'msg': 'Novel not found'}, 404
+
+        return {
+            'id': novel.id,
+            'title': novel.title,
+            'genre': novel.genre,
+            'author': novel.author,
+            'profile': novel.profile,
+            'publication_year': novel.publication_year,
+            'synopsis': novel.synopsis,
+            'created_at': novel.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        }, 200
+        
 
 
 novels_api.add_resource(AddNovel, '/addnovel')  
 novels_api.add_resource(GetNovel, '/<int:novel_id>')    
+novels_api.add_resource(Gettitle, '/name/<string:title>')    
+
 
 
 novels_api.add_resource(ListNovels, '/list')
