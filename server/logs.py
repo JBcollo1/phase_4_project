@@ -17,7 +17,7 @@ def user_detail(_jwt_header, jwt_data):
     identity = jwt_data['sub']
     return User.query.filter_by(id=identity).first()
 
-# Define request parsers for signup and login
+
 signup_args = reqparse.RequestParser()
 signup_args.add_argument('username', type=str, help="Username is required", required=True)
 signup_args.add_argument('password', type=str, help="Password is required", required=True)
@@ -63,7 +63,7 @@ class Login(Resource):
 class Logout(Resource):
     @jwt_required()
     def delete(self):
-        jti = get_jwt()['jti']  # JWT ID, a unique identifier for a JWT
+        jti = get_jwt()['jti']  
         blacklist.add(jti)
         return {"msg":"Successfully logged out"}
 
