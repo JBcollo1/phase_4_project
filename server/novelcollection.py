@@ -47,10 +47,13 @@ class UpdateNovelInCollection(Resource):
         db.session.commit()
 
         return {'msg': 'Collection updated successfully'}, 200
-
 class GetUserCollection(Resource):
     @jwt_required()
     def get(self, user_id):
+        current_user_id = get_jwt_identity()
+        if current_user_id != user_id:
+            return {'msg': 'Unauthorized'}, 403
+
         collections = NovelCollection.query.filter_by(user_id=user_id).all()
 
         collections_list = [{
@@ -63,6 +66,7 @@ class GetUserCollection(Resource):
         } for collection in collections]
 
         return {'collections': collections_list}, 200
+
 class DeleteNovelFromCollection(Resource):
     @jwt_required()
     def delete(self, collection_id):
@@ -78,9 +82,13 @@ class DeleteNovelFromCollection(Resource):
 
         return {'msg': 'Novel removed from collection successfully'}, 200
 
-
+class GetUserId(Resource):
+    @jwt_required()
+    def get(self):
+        user_id = get_jwt_identity()  # Extract userId from the JWT token
+        return {'userId': user_id}, 200
 novelcollect_api.add_resource(DeleteNovelFromCollection, '/delete/<int:collection_id>')
-
+novelcollect_api.add_resource(GetUserId, '/getUserId')
 novelcollect_api.add_resource(AddNovelToCollection, '/add')
 novelcollect_api.add_resource(UpdateNovelInCollection, '/update/<int:collection_id>')
 novelcollect_api.add_resource(GetUserCollection, '/user/<int:user_id>')
