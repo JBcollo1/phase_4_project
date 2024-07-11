@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_restful import Api, Resource, reqparse
 from config import db, bcrypt, jwt
 from models import NovelCollection
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import  create_access_token ,create_refresh_token, jwt_required, get_jwt,get_jwt_identity
 
 novelcollect_bp = Blueprint('novelcollect_bp', __name__, url_prefix='/novelcollection')
 novelcollect_api = Api(novelcollect_bp)
@@ -16,6 +16,7 @@ class AddNovelToCollection(Resource):
     @jwt_required()
     def post(self):
         data = novelcollect_args.parse_args()
+        
 
         
         existing_collection = NovelCollection.query.filter_by(user_id=data['user_id'], novel_id=data['novel_id']).first()

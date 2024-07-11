@@ -1,6 +1,6 @@
 # logs.py
 
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from flask_restful import Api, Resource, reqparse
 from config import db, bcrypt, jwt  # Import db from config.py
 from models import User
@@ -59,6 +59,23 @@ class Login(Resource):
             "access_token": access_token,
             "refresh_token": refresh_token
             }
+class user(Resource):      
+        @jwt_required()
+        def get(self):
+            current_user = get_jwt_identity()
+            user = User.query.filter_by(id=current_user).first()
+            if not user:
+                return jsonify({"msg": "User not found"}), 404
+
+            return{
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "profile": user.profile,
+                "created_at": user.created_at.isoformat() ,
+                "updated_at": user.updated_at.isoformat() 
+            },200
+            # return jsonify(user_data), 200
 
 class Logout(Resource):
     @jwt_required()
@@ -70,4 +87,6 @@ class Logout(Resource):
 logs_api.add_resource(Signup, '/signup')
 logs_api.add_resource(Login, '/login')
 logs_api.add_resource(Logout, '/logout')
+logs_api.add_resource(user, '/user')
+
 

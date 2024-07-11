@@ -79,7 +79,7 @@ class GetNovel(Resource):
 class Gettitle(Resource):
     def get(self, title):
         try:
-        # Ensure the title is treated as a string
+        
             title = str(title)
         except ValueError:
             return {'msg': 'Invalid title format'}, 400
