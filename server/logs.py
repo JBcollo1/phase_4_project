@@ -53,12 +53,13 @@ class Login(Resource):
         if not bcrypt.check_password_hash(user.password, data['password']):
             return {"msg": "Wrong password"}, 401
         access_token = create_access_token(identity=user.id)
-        refresh_token =  create_refresh_token(identity = user.id)
+        refresh_token = create_refresh_token(identity=user.id)
 
-        return {"username":user.username,
+        return {
+            "username": user.username,
             "access_token": access_token,
             "refresh_token": refresh_token
-            }
+        }, 200
 class user(Resource):      
         @jwt_required()
         def get(self):
