@@ -1,8 +1,8 @@
 from datetime import datetime
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from flask_restful import Api, Resource, reqparse
 from config import db, bcrypt, jwt
-from models import NovelCollection
+from models import NovelCollection,User,Novel
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 
 novelcollect_bp = Blueprint('novelcollect_bp', __name__, url_prefix='/novelcollection')
@@ -39,7 +39,10 @@ class UpdateNovelInCollection(Resource):
     @jwt_required()
     def put(self, collection_id):
         data = novelcollect_args.parse_args()
+        print(f"Request Data: {data}")  # Add this line to check the incoming data
         collection = NovelCollection.query.get(collection_id)
+        user_id = get_jwt_identity()  
+        novel_id =NovelCollection.query.filter_by(user_id=user_id, novel_id=data['novel_id']).first()
         if not collection:
             return {'msg': 'Collection not found'}, 404
 
@@ -47,6 +50,7 @@ class UpdateNovelInCollection(Resource):
         db.session.commit()
 
         return {'msg': 'Collection updated successfully'}, 200
+
 class GetUserCollection(Resource):
     @jwt_required()
     def get(self, user_id):
@@ -56,16 +60,29 @@ class GetUserCollection(Resource):
 
         collections = NovelCollection.query.filter_by(user_id=user_id).all()
 
-        collections_list = [{
-            'id': collection.id,
-            'user_id': collection.user_id,
-            'novel_id': collection.novel_id,
-            'rating': collection.rating,
-            'created_at': collection.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-            'updated_at': collection.updated_at.strftime('%Y-%m-%d %H:%M:%S')
-        } for collection in collections]
+        collections_list = []
+        for collection in collections:
+            novel = Novel.query.get(collection.novel_id)
+            if novel:
+                collections_list.append({
+                    'id': collection.id,
+                    'user_id': collection.user_id,
+                    'novel_id': collection.novel_id,
+                    'rating': collection.rating,
+                    'created_at': collection.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                    'updated_at': collection.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
+                    'novel': {
+                        'title': novel.title,
+                        'genre': novel.genre,
+                        'author': novel.author,
+                        'profile': novel.profile,  # Ensure profile field is included
+                        'publication_year': novel.publication_year,
+                        'synopsis': novel.synopsis,
+                    }
+                })
 
         return {'collections': collections_list}, 200
+
 
 class DeleteNovelFromCollection(Resource):
     @jwt_required()
@@ -87,8 +104,30 @@ class GetUserId(Resource):
     def get(self):
         user_id = get_jwt_identity()  # Extract userId from the JWT token
         return {'userId': user_id}, 200
+    
+class GetUserDetails(Resource):
+    @jwt_required()
+    def get(self):
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        if not user:
+            return {'msg': 'User not found'}, 404
+
+        user_details = {
+            'id': user.id,
+            'username': user.username,
+            'profile': user.profile,
+            'email': user.email,
+            'created_at': user.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'updated_at': user.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+        }
+
+        return jsonify(user_details)
 novelcollect_api.add_resource(DeleteNovelFromCollection, '/delete/<int:collection_id>')
 novelcollect_api.add_resource(GetUserId, '/getUserId')
 novelcollect_api.add_resource(AddNovelToCollection, '/add')
 novelcollect_api.add_resource(UpdateNovelInCollection, '/update/<int:collection_id>')
 novelcollect_api.add_resource(GetUserCollection, '/user/<int:user_id>')
+novelcollect_api.add_resource(GetUserDetails, '/getuserdetails')
+
+
