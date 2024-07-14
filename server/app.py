@@ -8,7 +8,7 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
-from .config import Config
+from config import Config
 from sqlalchemy import MetaData
 
 # Define metadata for the database schema
@@ -48,12 +48,12 @@ def create_app():
 
     # Import models to register them with SQLAlchemy
     with app.app_context():
-        from .models import User, NovelCollection, Novel  # Import models here
+        from models import User, NovelCollection, Novel  # Import models here
 
     # Import API routes
-    from .logs import logs_bp
-    from .novels import novels_bp
-    from .novelcollection import novelcollect_bp
+    from logs import logs_bp
+    from novels import novels_bp
+    from novelcollection import novelcollect_bp
 
     app.register_blueprint(logs_bp)
     app.register_blueprint(novels_bp)

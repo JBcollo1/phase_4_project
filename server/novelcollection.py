@@ -1,8 +1,8 @@
 from datetime import datetime
 from flask import Blueprint, jsonify
 from flask_restful import Api, Resource, reqparse
-from .app import db, bcrypt, jwt
-from .models import NovelCollection,User,Novel
+from app import db, bcrypt, jwt
+from models import NovelCollection,User,Novel
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 novelcollect_bp = Blueprint('novelcollect_bp', __name__, url_prefix='/novelcollection')
