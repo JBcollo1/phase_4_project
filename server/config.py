@@ -15,7 +15,7 @@ import os
 
 # Instantiate app, set attributes
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI', 'postgresql://nest_nkpa_user:7ImvCUBGdDEin5cpL80TCvPRDwmJ0MT2@dpg-cq9s53dds78s739i8gqg-a.ohio-postgres.render.com/nest_nkpa?sslmode=require')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI', 'postgresql://nest_nkpa_user:7ImvCUBGdDEin5cpL80TCvPRDwmJ0MT2@dpg-cq9s53dds78s739i8gqg-a.ohio-postgres.render.com/nest_nkpa')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
