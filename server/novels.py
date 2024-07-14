@@ -1,3 +1,4 @@
+#novels.py
 from flask import Blueprint, request
 from flask_restful import Api, Resource, reqparse
 from app import db, bcrypt, jwt  
