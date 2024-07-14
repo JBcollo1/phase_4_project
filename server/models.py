@@ -2,7 +2,7 @@
 
 from sqlalchemy_serializer import SerializerMixin
 from datetime import datetime
-from config import db  # Import db from config.py
+from .app import db  # Import db from config.py
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
