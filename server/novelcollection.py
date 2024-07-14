@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify
 from flask_restful import Api, Resource, reqparse
 from config import db, bcrypt, jwt
 from models import NovelCollection,User,Novel
-from flask_jwt_extended import  crjwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 novelcollect_bp = Blueprint('novelcollect_bp', __name__, url_prefix='/novelcollection')
 novelcollect_api = Api(novelcollect_bp)
