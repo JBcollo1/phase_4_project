@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask_restful import Api, Resource, reqparse
 from config import db, bcrypt, jwt  
 from models import  Novel 
-from flask_jwt_extended import create_accjwt_required, get_jwt, get_jwt_identity
+from flask_jwt_extended import create_jwt_required, get_jwt, get_jwt_identity
 
 
 novels_bp = Blueprint('novels_bp', __name__, url_prefix='/novels')
