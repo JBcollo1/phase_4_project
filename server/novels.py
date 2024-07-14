@@ -99,7 +99,18 @@ class Gettitle(Resource):
             'created_at': novel.created_at.strftime('%Y-%m-%d %H:%M:%S')
         }, 200
         
+class DeleteNovel(Resource):
+    @jwt_required()
+    def delete(self, novel_id):
+        novel = Novel.query.get(novel_id)
+        if not novel:
+            return {'msg': 'Novel not found'}, 404
 
+        db.session.delete(novel)
+        db.session.commit()
+        return {'msg': 'Novel deleted successfully'}, 200
+    
+novels_api.add_resource(DeleteNovel, '/delete/<int:novel_id>')    
 
 novels_api.add_resource(AddNovel, '/addnovel')  
 novels_api.add_resource(GetNovel, '/<int:novel_id>')    
