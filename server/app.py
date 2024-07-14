@@ -6,9 +6,13 @@
 # Remote library imports
 from flask import request
 from flask_restful import Resource
+import os
+from dotenv import load_dotenv  # Import this
+
+load_dotenv()
 
 # Local imports
-from config import app, db, api
+from config import app 
 from logs import logs_bp  
 from novels import novels_bp
 from novelcollection import novelcollect_bp
